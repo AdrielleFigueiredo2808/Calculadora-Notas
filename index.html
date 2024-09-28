@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="herbert">
+    <meta name="description" content="site feito para você aluno saber se você passou na escola ou não. Venha ver se você passou ou repetiu">
+    <meta name="robots" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcular - Média</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <h1>Calculadora Notas</h1>
+    </header>
+    <main>
+        <section>
+            <form action="">
+                <p>Nota 1: <input type="number" id="cxnota1" onblur="verificanumber()" step="0.1" placeholder="ex: 1" max="10" required></p>
+                <p>Nota 2: <input type="number" id="cxnota2" onblur="verificanumber()" step="0.1" placeholder="ex: 2" max="10" required></p>
+                <p>Nota 3: <input type="number" id="cxnota3" onblur="verificanumber()" step="0.1" placeholder="ex: 3" max="10" required></p>
+                <p>Nota 4: <input type="number" id="cxnota4" onblur="verificanumber()" step="0.1" placeholder="ex: 4" max="10" required></p>
+            
+                <p class="btn">
+                    <input type="submit" value="Calcular" id="enviar">
+                    <input type="reset" value="Limpar" id="limpa">
+                </p>
+            </form>
+            <p id="media" class="reslt">Média</p>
+            <p id="status" class="reslt">Status</p>
+        </section>
+        <p id="alerta"></p>
+    </main>
+
+    <script>
+        // Função para verificar se o número inserido está dentro do limite
+        function verificanumber() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            let alerta = document.getElementById('alerta');
+            let valid = true;
+            
+            inputs.forEach(input => {
+                if (input.value < 0 || input.value > 10) {
+                    input.style.border = '1px solid red'; // Adiciona borda vermelha
+                    alerta.textContent = 'As notas devem estar entre 0 e 10!';
+                    valid = false;
+                } else {
+                    input.style.border = ''; // Reseta borda se válido
+                }
+            });
+
+            return valid;
+        }
+
+        // Função para calcular a média e exibir resultados
+        document.getElementById('enviar').addEventListener('click', function(event) {
+            event.preventDefault(); // Evita que o formulário seja enviado
+
+            if (!verificanumber()) {
+                return; // Se houver erro, não prossegue
+            }
+
+            // Coletando as notas
+            let nota1 = parseFloat(document.getElementById('cxnota1').value);
+            let nota2 = parseFloat(document.getElementById('cxnota2').value);
+            let nota3 = parseFloat(document.getElementById('cxnota3').value);
+            let nota4 = parseFloat(document.getElementById('cxnota4').value);
+          
+            // Calculando a média
+            let media = ((nota1 + nota2 + nota3 + nota4) / 4).toFixed(1);
+            
+            // Exibindo a média
+            document.getElementById('media').textContent = `Média: ${media}`;
+            
+            // Verificando o status de aprovação
+            let status;
+            if (media >= 6) { // Ajuste para 6
+                status = 'Aprovado';
+                document.getElementById('status').style.color = 'green';
+            } else {
+                status = 'Reprovado';
+                document.getElementById('status').style.color = 'red';
+            }
+            
+            // Exibindo o status de aprovação
+            document.getElementById('status').textContent = `Status: ${status}`;
+        });
+
+        // Função para limpar campos ao resetar
+        document.getElementById('limpa').addEventListener('click', function() {
+            document.getElementById('media').textContent = 'Média';
+            document.getElementById('status').textContent = 'Status';
+            document.getElementById('alerta').textContent = '';
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                input.style.border = ''; 
+            });
+        });
+    </script>
+</body>
+</html>
+
